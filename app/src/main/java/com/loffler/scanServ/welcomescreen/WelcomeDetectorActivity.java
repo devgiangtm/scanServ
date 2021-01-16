@@ -11,6 +11,7 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Size;
@@ -28,12 +29,17 @@ import com.loffler.scanServ.cdcgesture.ImageUtils;
 import com.loffler.scanServ.cdcgesture.detection.Detector;
 import com.loffler.scanServ.cdcgesture.detection.MultiBoxTracker;
 import com.loffler.scanServ.cdcgesture.detection.TFLiteObjectDetectionAPIModel;
+import com.loffler.scanServ.cdcsetting.SharedPreferencesController;
 import com.loffler.scanServ.customview.OverlayView;
+import com.loffler.scanServ.utils.ViewUtilsKt;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static com.loffler.scanServ.Constants.DashboardSettingsReturnToForegroundTimeoutKey;
+import static com.loffler.scanServ.Constants.WELCOME_ENABLE;
 
 public class WelcomeDetectorActivity extends WelcomeActivity implements OnImageAvailableListener {
     // Configuration values for the prepackaged SSD model.
@@ -80,11 +86,8 @@ public class WelcomeDetectorActivity extends WelcomeActivity implements OnImageA
                         TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DIP, getResources().getDisplayMetrics());
         borderedText = new BorderedText(textSizePx);
         borderedText.setTypeface(Typeface.MONOSPACE);
-
         tracker = new MultiBoxTracker(this);
-
         int cropSize = TF_OD_API_INPUT_SIZE;
-
         try {
             detector =
                     TFLiteObjectDetectionAPIModel.create(

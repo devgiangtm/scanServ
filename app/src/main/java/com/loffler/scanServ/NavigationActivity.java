@@ -130,6 +130,8 @@ public class NavigationActivity extends BaseActivity implements Button.OnClickLi
 //        }
         if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
             startActivity(new Intent(getApplicationContext(), WelcomeDetectorActivity.class));
+        } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)){
+            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         }
 
     }

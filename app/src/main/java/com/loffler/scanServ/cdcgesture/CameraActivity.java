@@ -47,6 +47,7 @@ import com.loffler.scanServ.dashboard.DashboardActivity;
 import com.loffler.scanServ.service.sql.dao.DaoResult;
 import com.loffler.scanServ.service.sql.dao.OutputDao;
 import com.loffler.scanServ.service.sql.dao.OutputDaoImpl;
+import com.loffler.scanServ.utils.AppLauncherImpl;
 import com.loffler.scanServ.welcomescreen.WelcomeDetectorActivity;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import com.stepstone.stepper.StepperLayout;
@@ -164,17 +165,6 @@ public abstract class CameraActivity extends AppCompatActivity
 
     }
 
-    public void openMipsApp() {
-        PackageManager packageManager = getBaseContext().getPackageManager();
-        Intent intent2 = packageManager.getLaunchIntentForPackage("com.neldtv.mips");
-        Intent intent1 = intent2;
-        if (intent2 == null) {
-            intent1 = packageManager.getLaunchIntentForPackage("com.gate.mips");
-        }
-        if (intent1 != null) {
-            this.startActivity(intent1);
-        }
-    }
 
     protected void showPopupConfirm(boolean isApprove, String message) {
         layoutConfirm.setVisibility(View.VISIBLE);
@@ -206,10 +196,15 @@ public abstract class CameraActivity extends AppCompatActivity
             public void onFinish() {
                 mCountDownTimer.cancel();
                 finish();
-                if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
-                    startActivity(new Intent(getBaseContext(), WelcomeDetectorActivity.class));
-                } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
-                    startActivity(new Intent(getBaseContext(), DashboardActivity.class));
+//                if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
+//                    startActivity(new Intent(getBaseContext(), WelcomeDetectorActivity.class));
+//                } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
+//                    startActivity(new Intent(getBaseContext(), DashboardActivity.class));
+//                }
+                if (prefs.getBoolean(Constants.WELCOME_ENABLE, false) || prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
+                    new AppLauncherImpl(getApplicationContext()).launchScanServ();
+                } else {
+                    new AppLauncherImpl(getApplicationContext()).launchMips();
                 }
             }
         }.start();
@@ -219,10 +214,15 @@ public abstract class CameraActivity extends AppCompatActivity
     public void onBackPressed() {
         super.onBackPressed();
         mCountDownTimer.cancel();
-        if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
-            startActivity(new Intent(getBaseContext(), WelcomeDetectorActivity.class));
-        } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
-            startActivity(new Intent(getBaseContext(), DashboardActivity.class));
+//        if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
+//            startActivity(new Intent(getBaseContext(), WelcomeDetectorActivity.class));
+//        } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
+//            startActivity(new Intent(getBaseContext(), DashboardActivity.class));
+//        }
+        if (prefs.getBoolean(Constants.WELCOME_ENABLE, false) || prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
+            new AppLauncherImpl(getApplicationContext()).launchScanServ();
+        } else {
+            new AppLauncherImpl(getApplicationContext()).launchMips();
         }
     }
 

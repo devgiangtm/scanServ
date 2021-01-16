@@ -9,8 +9,8 @@ import com.loffler.scanServ.Constants
 
 interface AppLauncher {
     fun launchEzPass()
+    fun launchMips()
     fun launchScanServ()
-    fun finishCurrentActivity()
 }
 
 class AppLauncherImpl(val context: Context) : AppLauncher {
@@ -35,15 +35,18 @@ class AppLauncherImpl(val context: Context) : AppLauncher {
         }
     }
 
+    override fun launchMips() {
+        if (!openApp(EZ_PASS_PACKAGE_NAME)) {
+            MessageProvider.showToast(context, "Unable to open ScanServ")
+        }
+    }
+
     override fun launchScanServ() {
         if (!openApp(SCAN_SERV_DASHBOARD_ACTION)) {
             MessageProvider.showToast(context, "Unable to open ScanServ")
         }
     }
 
-    override fun finishCurrentActivity() {
-        (context as Activity).finish()
-    }
 
     private fun openApp(packageName: String): Boolean {
         val intent = context.packageManager.getLaunchIntentForPackage(packageName) ?: return false

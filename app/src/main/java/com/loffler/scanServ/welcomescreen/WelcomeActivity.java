@@ -137,10 +137,10 @@ public abstract class WelcomeActivity extends AppCompatActivity
     protected void nextQuestion() {
         boolean isDashboardFeatureEnabled = prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false);
         long timeout = prefs.getLong(Constants.DashboardSettingsReturnToForegroundTimeoutKey, 15L);
+        finish();
         if (isDashboardFeatureEnabled) {
             startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         } else {
-            finish();
             new AppLauncherImpl(getApplicationContext()).launchEzPass();
         }
     }

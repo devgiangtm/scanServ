@@ -58,7 +58,7 @@ public class WelcomeSettingsActivity extends AppCompatActivity implements Button
         String stringMessage = tilWelcomeMessage.getEditText().getText().toString();
         SharedPreferencesController.with(getBaseContext()).saveLong(
                 DashboardSettingsReturnToForegroundTimeoutKey,
-                Long.valueOf(tempTimeout.equals("") ? "-1" : tempTimeout));
+                Long.valueOf(tempTimeout.equals("") ? "15" : tempTimeout));
         SharedPreferencesController.with(getBaseContext()).saveString(DashboardSettingsLogoImagePathKey, stringUri);
         SharedPreferencesController.with(getBaseContext()).saveString(DashboardSettingsQrCodeContentKey, stringQr);
         SharedPreferencesController.with(getBaseContext()).saveString(WELCOME_MESSAGE, stringMessage);
