@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.App.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch" parent="">
+        <item name="colorOnSurface">@color/black</item>
+        <item name="colorSecondary">@color/black_light</item>
+        <item name="colorControlHighlight">@color/black_light</item>
+<!--        <item name="controlBackground">@color/settings_switch_color_bg</item>-->
+    </style>
+</resources>

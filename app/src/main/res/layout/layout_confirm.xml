@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutConfirm"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_centerInParent="true"
+    android:background="@drawable/circle_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone">
+
+    <RelativeLayout
+        android:background="@drawable/denied_bg"
+        android:id="@+id/layoutBackground"
+        android:layout_width="@dimen/tfe_confirm_radius"
+        android:layout_height="@dimen/tfe_confirm_radius">
+
+        <ImageView
+            android:layout_margin="16dp"
+            android:id="@+id/approve"
+            app:srcCompat="@drawable/avd_anim_denied"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:id="@+id/tvWarning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size" />
+</LinearLayout>
+

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_stroke_black"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imgUser"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brotherCompanyName"
+        app:tint="@android:color/black"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/brotherCompanyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:lines="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/solid_black"
+        tools:text="Company Name"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/solid_black"
+        app:layout_constraintStart_toEndOf="@id/imgUser"
+        app:layout_constraintTop_toTopOf="@id/imgUser"
+        tools:text="Name: John"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/scanDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/solid_black"
+        app:layout_constraintStart_toStartOf="@id/userName"
+        app:layout_constraintTop_toBottomOf="@id/userName"
+        tools:text="Date: 1/1/2020"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/scanTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/solid_black"
+        app:layout_constraintStart_toStartOf="@id/scanDate"
+        app:layout_constraintTop_toBottomOf="@id/scanDate"
+        tools:text="Time: 2:30 PM"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/scanTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/solid_black"
+        app:layout_constraintStart_toStartOf="@id/scanTime"
+        app:layout_constraintTop_toBottomOf="@id/scanTime"
+        tools:text="Temp: 00.00"
+        android:visibility="invisible" />
+
+    <View
+        android:id="@+id/signatureLine"
+        android:layout_width="200dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="40dp"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/imgUser"
+        app:layout_constraintStart_toStartOf="@id/imgUser"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:id="@+id/checkmarkHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toTopOf="@id/checkmark"
+        app:layout_constraintStart_toStartOf="@id/checkmark"
+        app:layout_constraintEnd_toEndOf="@id/checkmark"
+        android:text="Temp OK"
+        android:textSize="18sp"
+        android:textColor="@color/solid_black" />
+
+    <ImageView
+        android:id="@+id/checkmark"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/checked_checkbox"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brotherCompanyName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/circle"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/black_circle"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brotherCompanyName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="invisible"/>
+    <TextView
+        android:id="@+id/circleText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/circle"
+        app:layout_constraintTop_toBottomOf="@id/brotherCompanyName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/solid_black"
+        android:textSize="30sp"
+        tools:text="M"
+        android:visibility="invisible"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

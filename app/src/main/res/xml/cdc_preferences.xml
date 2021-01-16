@@ -1,0 +1,33 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:iconSpaceReserved="false">
+        <PreferenceCategory android:title="CDC Setting">
+            <SwitchPreferenceCompat
+                app:key="cdc_questionnaire"
+                app:title="CDC Questionnaire Screen" />
+            <SwitchPreferenceCompat
+                app:allowDividerAbove="true"
+                app:dependency="cdc_questionnaire"
+                app:key="cdc_mask"
+                app:title="@string/email_no_mask" />
+        </PreferenceCategory>
+        <PreferenceCategory android:title="Require answer CDC Questionnaire"
+            app:dependency="cdc_questionnaire"
+            >
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="require_role_employee"
+                android:title="Employee" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="require_role_visitor"
+                android:title="Visitor" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="require_role_unregister"
+                android:title="Unregistered User" />
+        </PreferenceCategory>
+    </PreferenceCategory>
+
+</PreferenceScreen>

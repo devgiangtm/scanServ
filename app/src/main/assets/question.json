@@ -1,0 +1,14 @@
+[
+  {
+    "question": "\tHave you experienced any of the following symptoms in the past 48 hours:\n\nFever or chills\nCough\nFatigue\nShortness of breath or difficulty breathing\nMuscle or body aches\nHeadache\nNew loss of taste or smell\nSore throat\nNausea or vomiting\nCongestion or runny nose\nDiarrhea"
+  },
+  {
+  "question": "\tWithin the past 14 days, have you been in close physical contact (6 feet or closer for a cumulative total of 15 minutes) with:\n\n\t- Anyone who is known to have laboratory-confirmed COVID-19?\n\t- Anyone who has any symptoms consistent with COVID-19?"
+  },
+  {
+  "question": "\tAre you isolating or quarantining because you may have been exposed to a person with COVID-19 or are worried that you may be sick with COVID-19?"
+  },
+  {
+  "question": "\tAre you currently waiting on the results of a COVID-19 test?"
+  }
+]

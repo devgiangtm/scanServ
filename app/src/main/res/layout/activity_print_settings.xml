@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/badgePrintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/badgePrintingSwitch"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/companyName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Company Name (Overrides EZ-Pass setting)"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/companyNameReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:text="Company Name (Overrides EZ-Pass setting)"
+            app:layout_constraintTop_toBottomOf="@id/companyName"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <Switch
+            android:id="@+id/printCompanyNameSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include company name on printed badge"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/companyNameReminder" />
+
+        <Switch
+            android:id="@+id/printTempSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include temperature on printed badge"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/printCompanyNameSwitch" />
+
+        <Switch
+            android:id="@+id/printDateSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include date of scan on printed badge"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/printTempSwitch" />
+
+        <Switch
+            android:id="@+id/printTimeSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include time of scan on printed badge"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/printDateSwitch" />
+
+        <Switch
+            android:id="@+id/printNameSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include name of person on printed badge"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/printTimeSwitch" />
+
+        <Switch
+            android:id="@+id/printSignatureSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include signature line on printed badge"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/printNameSwitch" />
+
+        <Switch
+            android:id="@+id/printImageSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Include image on printed badge (Brother only)"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/printSignatureSwitch" />
+
+        <TextView
+            android:id="@+id/checkmarkSpinnerReminder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@id/printImageSwitch"
+            app:layout_constraintStart_toStartOf="@id/printImageSwitch"
+            android:text="Safe temperature indicator type" />
+
+        <Spinner
+            android:id="@+id/checkmarkTypeSpinner"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/checkmarkSpinnerReminder"
+            app:layout_constraintStart_toStartOf="@id/checkmarkSpinnerReminder"/>
+
+        <ImageView
+            android:id="@+id/exampleBadgeImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="40dp"
+            android:src="@drawable/badge_day_of_week"
+            app:layout_constraintStart_toEndOf="@id/checkmarkTypeSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/checkmarkTypeSpinner"
+            app:layout_constraintBottom_toBottomOf="@id/checkmarkTypeSpinner" />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@id/exampleBadgeImage"
+            app:layout_constraintStart_toStartOf="@id/exampleBadgeImage"
+            app:layout_constraintEnd_toEndOf="@id/exampleBadgeImage"
+            android:lines="2"
+            android:text="Example of selected safe temperature indicator"/>
+
+        <Switch
+            android:id="@+id/printFailedTempBadgeSwitch"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:text="Print a badge on a failed temperature test"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/checkmarkTypeSpinner" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/failedBadgeInfoLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/printFailedTempBadgeSwitch"
+            app:layout_constraintTop_toBottomOf="@id/printFailedTempBadgeSwitch">
+
+            <EditText
+                android:id="@+id/infoLine1EditText"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:ems="10"
+                android:hint="Failed temp check badge line 1 (30 chars max)"
+                android:inputType="text"
+                android:maxLength="30"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/infoLine1Reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Failed temp check badge line 1 (30 chars max)"
+                app:layout_constraintTop_toBottomOf="@id/infoLine1EditText"
+                app:layout_constraintStart_toStartOf="@id/infoLine1EditText"
+                android:duplicateParentState="true"/>
+
+            <EditText
+                android:id="@+id/infoLine2EditText"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:ems="10"
+                android:hint="Failed temp check badge line 2 (30 chars max)"
+                android:inputType="text"
+                android:maxLength="30"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/infoLine1Reminder"/>
+
+            <TextView
+                android:id="@+id/infoLine2Reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Failed temp check badge line 2 (30 chars max)"
+                app:layout_constraintTop_toBottomOf="@id/infoLine2EditText"
+                app:layout_constraintStart_toStartOf="@id/infoLine2EditText"
+                android:duplicateParentState="true"/>
+
+            <EditText
+                android:id="@+id/infoLine3EditText"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:ems="10"
+                android:hint="Failed temp check badge line 3 (30 chars max)"
+                android:inputType="text"
+                android:maxLength="30"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/infoLine2Reminder"/>
+
+            <TextView
+                android:id="@+id/infoLine3Reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Failed temp check badge line 3 (30 chars max)"
+                app:layout_constraintTop_toBottomOf="@id/infoLine3EditText"
+                app:layout_constraintStart_toStartOf="@id/infoLine3EditText"
+                android:duplicateParentState="true"/>
+
+            <EditText
+                android:id="@+id/infoLine4EditText"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:duplicateParentState="true"
+                android:ems="10"
+                android:hint="Failed temp check badge line 4 (30 chars max)"
+                android:inputType="text"
+                android:maxLength="30"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/infoLine3Reminder"/>
+
+            <TextView
+                android:id="@+id/infoLine4Reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Failed temp check badge line 4 (30 chars max)"
+                app:layout_constraintTop_toBottomOf="@id/infoLine4EditText"
+                app:layout_constraintStart_toStartOf="@id/infoLine4EditText"
+                android:duplicateParentState="true"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/savePrintSettingsButton"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Save Settings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/failedBadgeInfoLayout" />
+
+        <Button
+            android:id="@+id/testPrintButton"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            android:text="Print Test Label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/savePrintSettingsButton" />
+
+        <TextView
+            android:id="@+id/printerStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text=""
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/testPrintButton"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <Switch
+        android:id="@+id/badgePrintingSwitch"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:ems="10"
+        android:text="Disable Printing"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

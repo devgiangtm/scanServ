@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="@dimen/large_225">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".dashboard.DashboardSettingsActivity">
+
+        <LinearLayout
+            android:id="@+id/llEnableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large_225"
+            android:layout_marginEnd="@dimen/normal_100"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:layout_width="0dp"
+                android:layout_weight="9"
+                android:layout_height="wrap_content"
+                android:text="Enable welcome screen" />
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <Switch
+                    android:id="@+id/swEnableWelcomeScreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/dashboard_settings_focus_trick"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <requestFocus />
+        </RelativeLayout>
+
+
+        <View
+            android:id="@+id/dashboard_settings_top_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/normal_100"
+            android:layout_marginEnd="@dimen/normal_100"
+            android:background="?android:attr/listDivider" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dashboard_settings_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="1dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dashboard_settings_top_separator">
+
+            <TextView
+                android:id="@+id/dashboard_settings_title_txt_background_timeout"
+                style="@style/Style.Settings.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_100"
+                android:text="Temperature Timeout (in second):"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTempTimeout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_225"
+                android:layout_marginTop="@dimen/normal_100"
+                android:layout_marginEnd="@dimen/normal_100"
+                app:helperTextEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dashboard_settings_title_txt_background_timeout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:nestedScrollingEnabled="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/dashboard_settings_title_txt_logo"
+                style="@style/Style.Settings.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_100"
+                android:text="@string/logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilTempTimeout" />
+
+
+            <Button
+                android:id="@+id/btnImagePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_100"
+                android:text="@string/choose"
+                app:layout_constraintEnd_toStartOf="@+id/btnDeleteLogo"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@+id/dashboard_settings_title_txt_logo"
+                app:layout_constraintTop_toBottomOf="@+id/dashboard_settings_title_txt_logo" />
+
+            <Button
+                android:id="@+id/btnDeleteLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/normal_100"
+                android:text="@string/delete"
+                app:layout_constraintBottom_toBottomOf="@+id/btnImagePicker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnImagePicker"
+                app:layout_constraintTop_toTopOf="@+id/btnImagePicker" />
+
+            <ImageView
+                android:id="@+id/ivLogoPreview"
+                android:layout_width="300dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="@dimen/normal_150"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/dashboard_settings_title_txt_logo"
+                app:layout_constraintTop_toBottomOf="@+id/btnImagePicker"
+                tools:srcCompat="@drawable/img_logo" />
+
+            <TextView
+                android:id="@+id/textView7"
+                style="@style/Style.Settings.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_100"
+                android:text="@string/qr_setup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivLogoPreview" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilQrCode"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_225"
+                android:layout_marginTop="@dimen/normal_100"
+                android:layout_marginEnd="@dimen/normal_100"
+                app:helperText="@string/hint_qr_code_content"
+                app:helperTextEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView7">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:nestedScrollingEnabled="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/Style.Settings.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_100"
+                android:text="@string/mesage_setup"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilQrCode" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilWelcomeMessage"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/large_225"
+                android:layout_marginTop="@dimen/normal_100"
+                android:layout_marginEnd="@dimen/normal_100"
+                app:helperTextEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvMessage">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:maxLength="255"
+                    android:minLines="5"
+                    android:nestedScrollingEnabled="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilWelcomeMessage" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
