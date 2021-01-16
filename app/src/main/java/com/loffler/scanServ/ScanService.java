@@ -62,6 +62,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static com.loffler.scanServ.Constants.CURRENT_SCAN_ID;
 import static com.loffler.scanServ.Constants.SQLTableName;
 import static com.loffler.scanServ.Constants.swSQLWriteLogs;
 
@@ -516,7 +517,7 @@ public class ScanService extends Service {
                     Double temperature = parseTemperature(json);
                     Date checkTime = parseCheckTime(json);
                     OutputDao.Record.Update record = new OutputDao.Record.Update(mac, name, checkTime, temperature, userId, type, mask, null, null, null, null, null);
-                    outputDao.update(record);
+                    outputDao.update(record,SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID));
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error getting data from JSON before inserting into SQL database: " + e.getMessage());
                 }
@@ -532,7 +533,8 @@ public class ScanService extends Service {
                 try {
                     String userId = json.getString("userId");
                     OutputDao.Record.Insert record = new OutputDao.Record.Insert(userId);
-                    DaoResult<Integer> insert = outputDao.insert(record);
+                    int insert = outputDao.insert(record);
+                    SharedPreferencesController.with(getApplicationContext()).saveInt(CURRENT_SCAN_ID,insert);
 //                    Future<DaoResult<Boolean>> submit = singleThreadExecutor.submit(() -> outputDao.insert(record));
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error getting data from JSON before inserting into SQL database: " + e.getMessage());

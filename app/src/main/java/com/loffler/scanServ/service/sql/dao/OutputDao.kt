@@ -3,11 +3,14 @@ package com.loffler.scanServ.service.sql.dao
 import android.content.SharedPreferences
 import com.loffler.scanServ.Constants
 import com.loffler.scanServ.SQLHelper
+import com.loffler.scanServ.cdcsetting.SharedPreferencesController
 import com.loffler.scanServ.service.sql.ErrorCode
 import com.loffler.scanServ.utils.handleSqlError
 import java.sql.ResultSet
 import java.sql.Timestamp
 import java.util.*
+import kotlin.coroutines.coroutineContext
+
 
 interface OutputDao {
     sealed class Record(
@@ -45,8 +48,8 @@ interface OutputDao {
         ) : Record(macAddress, employeeId, scanTime, temperature, userId, type, mask, "", false, Date(), question1, question2, question3, question4, result)
     }
 
-    fun insert(record: Record.Insert): DaoResult<Int>
-    fun update(record: Record.Update): DaoResult<Boolean>
+    fun insert(record: Record.Insert): Int
+    fun update(record: Record.Update, scanId: Int): DaoResult<Boolean>
     fun createTable(tableName: String): Boolean
 }
 
@@ -72,7 +75,7 @@ class OutputDaoImpl(
         private const val CODE_COMPLETED_SUCCESSFULLY = 1
     }
 
-    override fun update(record: OutputDao.Record.Update): DaoResult<Boolean> {
+    override fun update(record: OutputDao.Record.Update, scanId: Int): DaoResult<Boolean> {
         val connection = SQLHelper.getConnection(preferences)
                 ?: return DaoResult.Error(ErrorCode.DatabaseConnection)
 
@@ -82,9 +85,8 @@ class OutputDaoImpl(
 
                 statement.use {
                     val tableName = preferences.getString(Constants.SQLTableName, "")
-                    val query = "SELECT TOP(1) * FROM $tableName WHERE $COLUMN_PENDING=1 ORDER BY $COLUMN_CREATED DESC"
+                    val query = "SELECT  * FROM $tableName WHERE $COLUMN_PENDING=1 AND id = $scanId"
                     val updateResult = it.executeQuery(query)
-
                     return if (updateResult.next()) {
                         updateResult.apply {
                             first()
@@ -114,14 +116,14 @@ class OutputDaoImpl(
         }
     }
 
-    override fun insert(record: OutputDao.Record.Insert): DaoResult<Int> {
+    override fun insert(record: OutputDao.Record.Insert): Int {
         val connection = SQLHelper.getConnection(preferences)
-                ?: return DaoResult.Error(ErrorCode.DatabaseConnection)
+                ?: return -1
 
         try {
             connection.use {
                 val tableName = preferences.getString(Constants.SQLTableName, "")
-                val statement = connection.prepareStatement("INSERT INTO $tableName VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)").apply {
+                val statement = connection.prepareStatement("INSERT INTO $tableName VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", arrayOf("id")).apply {
                     setString(1, record.macAddress)
                     setString(2, record.employeeId)
                     setTimestamp(3, record.scanTime?.let { date -> Timestamp(date.time) })
@@ -144,14 +146,15 @@ class OutputDaoImpl(
                     val rs = statement.generatedKeys
                     if (rs.next()) {
                         val id = rs.getInt("id")
-                        return DaoResult.Success(id)
+                        return id
                     } else {
-                        return DaoResult.Success(-1)
+                        return -1
                     }
                 }
             }
         } catch (ex: Exception) {
-            return ex.handleSqlError()
+            ex.printStackTrace()
+            return -1
         }
     }
 

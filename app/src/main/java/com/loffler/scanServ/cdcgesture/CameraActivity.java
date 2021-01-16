@@ -42,6 +42,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loffler.scanServ.Constants;
 import com.loffler.scanServ.R;
+import com.loffler.scanServ.cdcsetting.SharedPreferencesController;
 import com.loffler.scanServ.customview.MyStepperAdapter;
 import com.loffler.scanServ.dashboard.DashboardActivity;
 import com.loffler.scanServ.service.sql.dao.DaoResult;
@@ -61,6 +62,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.loffler.scanServ.Constants.CURRENT_SCAN_ID;
 import static com.loffler.scanServ.Constants.swSQLWriteLogs;
 
 public abstract class CameraActivity extends AppCompatActivity
@@ -344,7 +346,7 @@ public abstract class CameraActivity extends AppCompatActivity
                         record.setQuestion3(String.valueOf(questionList.get(2).getAnswer() == 1 ? "True" : "False"));
                         record.setQuestion4(String.valueOf(questionList.get(3).getAnswer() == 1 ? "True" : "False"));
                         record.setResult(finalResultTemp ? "Pass" : "Fail");
-                        DaoResult<Boolean> update = outputDao.update(record);
+                        DaoResult<Boolean> update = outputDao.update(record, SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID));
                         System.out.println("hihi");
                     }
                 }).start();

@@ -1,10 +1,10 @@
 package com.loffler.scanServ.dashboard
 
-import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.loffler.scanServ.Constants
 import com.loffler.scanServ.R
+import com.loffler.scanServ.cdcsetting.SharedPreferencesController
 import com.loffler.scanServ.service.HardwareScanner
 import com.loffler.scanServ.service.ScanValidator.*
-import com.loffler.scanServ.service.sql.dao.DaoResult
 import com.loffler.scanServ.service.sql.dao.OutputDao
 import com.loffler.scanServ.utils.AppLauncher
 import com.loffler.scanServ.utils.DialogSpec
@@ -23,6 +23,7 @@ import com.loffler.scanServ.utils.ResourceProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 
 class DashboardViewModel(
         private val qrCodeScanner: HardwareScanner,
@@ -38,9 +39,11 @@ class DashboardViewModel(
     private val errorMessage = MutableLiveData<Int>()
     private val dialogMessage = MutableLiveData<DialogSpec>()
     private val toast = MutableLiveData<String>()
+    private val scanId = MutableLiveData<Int>()
 
     fun errorMessageEvent(): LiveData<Int> = errorMessage
     fun dialogEvent(): LiveData<DialogSpec> = dialogMessage
+    fun scanId(): LiveData<Int> = scanId
     fun toastMessage(): LiveData<String> = toast
     fun logo(): LiveData<Uri?> = logo
     fun qrCode(): LiveData<Bitmap?> = inAppGeneratedQrCode
@@ -84,11 +87,11 @@ class DashboardViewModel(
         }
         if (pms) {
             val insertResult = withContext(Dispatchers.IO) { outputsDao.insert(OutputDao.Record.Insert(replaceStr)) }
-            when (insertResult) {
-                is DaoResult.Success -> {
-                    appLauncher.launchEzPass()
-                }
-                is DaoResult.Error -> toast.value = "Unable to proceed. Please contact your administrator"
+            if (insertResult == -1) {
+                toast.value = "Unable to proceed. Please contact your administrator"
+            } else {
+                scanId.value = insertResult
+                appLauncher.launchEzPass()
             }
         } else {
             appLauncher.launchEzPass()

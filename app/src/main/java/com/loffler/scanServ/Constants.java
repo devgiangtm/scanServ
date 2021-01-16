@@ -82,6 +82,7 @@ public final class Constants {
     public static final String DashboardSettingsReturnToForegroundTimeoutKey = "DashboardSettingsForceReturnDelay";
     public static final String WELCOME_ENABLE = "welcomeLogoPath";
     public static final String WELCOME_MESSAGE = "welcomeMessage";
+    public static final String CURRENT_SCAN_ID = "currentScanID";
     public static final long FORCE_RETURN_TO_FOREGROUND_TIMEOUT_DEFAULT_MS = 15 * 1000;
 
     public static class PrefInfo {

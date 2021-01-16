@@ -83,6 +83,9 @@ class DashboardActivity : AppCompatActivity() {
         scanViewModel.dialogEvent().observe(this, { dialogSpec ->
             MessageProvider.showAlert(this, dialogSpec)
         })
+        scanViewModel.scanId().observe(this, { dialogSpec ->
+            SharedPreferencesController.with(applicationContext).saveInt(Constants.CURRENT_SCAN_ID, dialogSpec)
+        })
         scanViewModel.logo().observe(this, { logoUri ->
             if (logoUri == null) {
                 val imageString = getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE).getString(Constants.CompanyLogoKey, "");

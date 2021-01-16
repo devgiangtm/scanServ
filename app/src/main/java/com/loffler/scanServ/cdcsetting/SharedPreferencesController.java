@@ -55,6 +55,17 @@ public class SharedPreferencesController {
         return sharedPreferences.getLong(key, -1L);
     }
 
+    public void saveInt(String key, int value) {
+        editor = sharedPreferences.edit();
+        editor.putInt(key, value);
+//        editor.apply();
+        editor.commit();
+    }
+
+    public int getInt(String key) {
+        return sharedPreferences.getInt(key, -1);
+    }
+
     public void clearAllData(Context context) {
         sharedPreferences = context.getSharedPreferences(mySharedPreferences, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
