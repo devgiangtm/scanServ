@@ -10,6 +10,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.loffler.scanServ.Constants
@@ -63,7 +64,13 @@ class DashboardActivity : AppCompatActivity() {
         if (SharedPreferencesController.with(applicationContext).getBoolean(Constants.WELCOME_ENABLE)) {
             val timeout = getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE).getLong(Constants.DashboardSettingsReturnToForegroundTimeoutKey, 15L);
             object : CountDownTimer(timeout * 1000L, 1000) {
-                override fun onTick(millisUntilFinished: Long) {}
+                override fun onTick(millisUntilFinished: Long) {
+                    if (millisUntilFinished > 5000 && millisUntilFinished < 6000) {
+                        val basic = DialogSpec.Basic(R.string.stay_security_too_long, getString(R.string.stay_security_too_long_message))
+                        basic.closeTimeOut = 5000L
+                        MessageProvider.showAlert(this@DashboardActivity, basic)
+                    }
+                }
                 override fun onFinish() {
                     if (!applicationContext.isAppInBackground()) {
                         finish()
@@ -126,7 +133,9 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun finish() {
         super.finish()
-        val dashboardIntent = Intent(baseContext, WelcomeDetectorActivity::class.java)
-        startActivity(dashboardIntent)
+        if (SharedPreferencesController.with(applicationContext).getBoolean(Constants.WELCOME_ENABLE)) {
+            val dashboardIntent = Intent(baseContext, WelcomeDetectorActivity::class.java)
+            startActivity(dashboardIntent)
+        }
     }
 }

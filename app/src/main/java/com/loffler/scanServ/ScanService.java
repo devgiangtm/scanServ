@@ -284,10 +284,12 @@ public class ScanService extends Service {
                                     getBaseContext().startActivity(dialogIntent);
                                 }
                             } else {
-                                if (prefs.getBoolean(Constants.SQLConnected, false) && prefs.getBoolean(swSQLWriteLogs, false)) {
-                                    submitOutput(reqJson);
+                                if(ViewUtilsKt.isAppInBackground(getApplicationContext())){
+                                    if (prefs.getBoolean(Constants.SQLConnected, false) && prefs.getBoolean(swSQLWriteLogs, false)) {
+                                        submitOutput(reqJson);
+                                    }
+                                    openLofflerApp();
                                 }
-                                openLofflerApp();
                             }
                             // Insert into the SQL table if we have successfully connected to one
 
@@ -324,7 +326,6 @@ public class ScanService extends Service {
         PackageManager packageManager = getBaseContext().getPackageManager();
         Intent intent = packageManager.getLaunchIntentForPackage("com.loffler.scanServ");
         startActivity(intent);
-
     }
 
 
@@ -517,7 +518,11 @@ public class ScanService extends Service {
                     Double temperature = parseTemperature(json);
                     Date checkTime = parseCheckTime(json);
                     OutputDao.Record.Update record = new OutputDao.Record.Update(mac, name, checkTime, temperature, userId, type, mask, null, null, null, null, null);
-                    outputDao.update(record,SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID));
+                    if (SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID) != -1){
+                        outputDao.update(record,SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID));
+                        SharedPreferencesController.with(getApplicationContext()).saveInt(CURRENT_SCAN_ID,-1);
+                    }
+
                 } catch (JSONException e) {
                     Log.e(LOG_TAG, "Error getting data from JSON before inserting into SQL database: " + e.getMessage());
                 }

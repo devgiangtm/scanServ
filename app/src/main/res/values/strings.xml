@@ -26,6 +26,8 @@
     <string name="ok">Ok</string>
     <string name="error">Error</string>
     <string name="error_validation_qr_code">Verification failed</string>
+    <string name="stay_security_too_long">Timeout</string>
+    <string name="stay_security_too_long_message">No security badge/barcode input received.  Restarting workflow.</string>
     <string name="input_code">Input Code: </string>
     <string name="error_message_generic">Please contact your administrator.</string>
     <string name="canceled">Canceled</string>

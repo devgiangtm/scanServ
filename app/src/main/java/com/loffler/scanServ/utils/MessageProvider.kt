@@ -15,7 +15,7 @@ import androidx.fragment.app.FragmentManager
 import com.loffler.scanServ.R
 import java.util.concurrent.TimeUnit
 
-sealed class DialogSpec(@StringRes val title: Int, val message: String, val closeTimeOut: Long? = TimeUnit.SECONDS.toMillis(3)) {
+sealed class DialogSpec(@StringRes val title: Int, val message: String, var closeTimeOut: Long? = TimeUnit.SECONDS.toMillis(3)) {
     class PositiveAction(@StringRes val buttonName: Int, val action: (() -> Unit)?) {
         companion object {
             fun default() = PositiveAction(R.string.ok, null)

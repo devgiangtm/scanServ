@@ -99,7 +99,6 @@ class DashboardViewModel(
 
     }
 
-
     override fun onCleared() {
         super.onCleared()
         qrCodeScanner.unsubscribe()

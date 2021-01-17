@@ -15,7 +15,6 @@ public class BootStartupReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             if (action != null && (action.equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED) || action.equalsIgnoreCase(Constants.REBOOT_ACTION))) {
                 Intent startSerIntent = new Intent(context, ScanService.class);
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     context.startForegroundService(startSerIntent);
                 } else {

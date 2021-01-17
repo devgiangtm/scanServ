@@ -256,8 +256,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
             @Override
             public void onFinish() {
-                showPopupConfirm(false, "Not Approved. You must answer the question.");
-
+                showPopupConfirm(false, "No gesture detected.  Restarting Workflow.");
             }
         }.start();
     }
@@ -346,7 +345,10 @@ public abstract class CameraActivity extends AppCompatActivity
                         record.setQuestion3(String.valueOf(questionList.get(2).getAnswer() == 1 ? "True" : "False"));
                         record.setQuestion4(String.valueOf(questionList.get(3).getAnswer() == 1 ? "True" : "False"));
                         record.setResult(finalResultTemp ? "Pass" : "Fail");
-                        DaoResult<Boolean> update = outputDao.update(record, SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID));
+                        if(SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID) != -1){
+                            DaoResult<Boolean> update = outputDao.update(record, SharedPreferencesController.with(getApplicationContext()).getInt(CURRENT_SCAN_ID));
+                            SharedPreferencesController.with(getApplicationContext()).saveInt(CURRENT_SCAN_ID,-1);
+                        }
                         System.out.println("hihi");
                     }
                 }).start();
