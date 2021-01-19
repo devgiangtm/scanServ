@@ -91,12 +91,11 @@ class DashboardViewModel(
                 toast.value = "Unable to proceed. Please contact your administrator"
             } else {
                 scanId.value = insertResult
-                appLauncher.launchEzPass()
-
+//                appLauncher.launchEzPass()
                 showTimeoutDialog.value = true
             }
         } else {
-            appLauncher.launchEzPass()
+//            appLauncher.launchEzPass()
             showTimeoutDialog.value = true
         }
 

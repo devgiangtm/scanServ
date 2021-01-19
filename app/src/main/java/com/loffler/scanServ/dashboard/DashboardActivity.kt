@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
 import android.util.Base64
 import android.view.KeyEvent
 import android.view.View
@@ -19,6 +20,7 @@ import com.loffler.scanServ.service.ScannedContentValidator
 import com.loffler.scanServ.service.sql.dao.OutputDaoImpl
 import com.loffler.scanServ.service.sql.dao.ValidationDaoImpl
 import com.loffler.scanServ.utils.*
+import com.loffler.scanServ.welcomescreen.WelcomeActivity
 import com.loffler.scanServ.welcomescreen.WelcomeDetectorActivity
 
 class DashboardActivity : AppCompatActivity() {
@@ -91,7 +93,9 @@ class DashboardActivity : AppCompatActivity() {
         })
         scanViewModel.showTimeoutDialog().observe(this, { isShow ->
             val timeout = SharedPreferencesController.with(applicationContext).getLong(Constants.DashboardSettingsReturnToForegroundTimeoutKey)
-            Utils.notificationArrived(this@DashboardActivity, getString(R.string.stay_too_long), getString(R.string.stay_mips_too_long_message), timeout)
+            AppLauncherImpl(applicationContext).launchMips()
+            handlerTimeout = Handler()
+            Utils.notificationArrived(this@DashboardActivity, getString(R.string.stay_too_long), getString(R.string.stay_mips_too_long_message), timeout, handlerTimeout)
 //            if(SharedPreferencesController.with(applicationContext).getBoolean(Constants.WELCOME_ENABLE)){
 //                finish()
 //            }
@@ -116,6 +120,18 @@ class DashboardActivity : AppCompatActivity() {
         })
 
     }
+    companion object {
+        private var handlerTimeout: Handler? = null
+
+        fun stopHandler() {
+            if (DashboardActivity.handlerTimeout != null) {
+                DashboardActivity.handlerTimeout!!.removeCallbacksAndMessages(null)
+                DashboardActivity.handlerTimeout = null
+            }
+        }
+    }
+
+
 
     private fun startScanServService() {
         val servIntent = Intent(applicationContext, ScanService::class.java)
@@ -131,6 +147,7 @@ class DashboardActivity : AppCompatActivity() {
         super.onStart()
         scanViewModel.loadSettings()
     }
+
 
     override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
         hardwareScanner.dispatchKeyEvent(event)

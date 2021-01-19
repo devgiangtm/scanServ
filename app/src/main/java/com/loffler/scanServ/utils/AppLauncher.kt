@@ -31,6 +31,7 @@ class AppLauncherImpl(val context: Context) : AppLauncher {
                     launchScanServ()
                 }
             }, forceReturnDelay * 1000L)
+
         } else {
             MessageProvider.showToast(context, "Unable to open EZ Pass")
         }
@@ -38,7 +39,7 @@ class AppLauncherImpl(val context: Context) : AppLauncher {
 
     override fun launchMips() {
         if (!openApp(EZ_PASS_PACKAGE_NAME)) {
-            MessageProvider.showToast(context, "Unable to open ScanServ")
+            MessageProvider.showToast(context, "Unable to open EZ Pass")
         }
     }
 

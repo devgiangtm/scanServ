@@ -84,6 +84,7 @@ public abstract class WelcomeActivity extends AppCompatActivity
     private SharedPreferences prefs;
     private ImageView ivLogo;
     private TextView tvWelcome;
+    private static Handler handlerTimeout;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -160,8 +161,16 @@ public abstract class WelcomeActivity extends AppCompatActivity
         if (isDashboardFeatureEnabled) {
             startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         } else {
-            new AppLauncherImpl(getApplicationContext()).launchEzPass();
-            notificationArrived(WelcomeActivity.this, getString(R.string.stay_too_long), getString(R.string.stay_mips_too_long_message), timeout);
+            new AppLauncherImpl(getApplicationContext()).launchMips();
+            handlerTimeout = new Handler();
+            notificationArrived(WelcomeActivity.this, getString(R.string.stay_too_long), getString(R.string.stay_mips_too_long_message), timeout,handlerTimeout);
+        }
+    }
+
+    public static void stopHandler(){
+        if(handlerTimeout != null){
+            handlerTimeout.removeCallbacksAndMessages(null);
+            handlerTimeout = null;
         }
     }
 

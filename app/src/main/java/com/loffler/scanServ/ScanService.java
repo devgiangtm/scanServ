@@ -38,11 +38,13 @@ import com.loffler.scanServ.cdcgesture.MipsData;
 import com.loffler.scanServ.cdcsetting.CDCSettingModel;
 import com.loffler.scanServ.cdcsetting.Keys;
 import com.loffler.scanServ.cdcsetting.SharedPreferencesController;
+import com.loffler.scanServ.dashboard.DashboardActivity;
 import com.loffler.scanServ.service.sql.dao.OutputDao;
 import com.loffler.scanServ.service.sql.dao.OutputDaoImpl;
 import com.loffler.scanServ.utils.AppLauncher;
 import com.loffler.scanServ.utils.AppLauncherImpl;
 import com.loffler.scanServ.utils.ViewUtilsKt;
+import com.loffler.scanServ.welcomescreen.WelcomeActivity;
 import com.opencsv.CSVWriter;
 
 import org.json.JSONException;
@@ -96,14 +98,17 @@ public class ScanService extends Service {
         boolean isOnTrial = Utils.checkTrialFileExists() && Utils.checkTrialValidity(this);
 
         if (serv != null) serv.stop();
-
+        Log.d("isActivated", "isActivated: "+isActivated);
+        Log.d("isActivated", "isOnTrial: "+isOnTrial);
         if (!isActivated) {
             if (!isOnTrial) {
                 // software wasn't activated. Do not start the service.
                 Log.e(LOG_TAG, "loadAndStartServer: Software not activated. Returning to key activation page");
                 startActivity(new Intent(this, ProductKeyActivity.class));
+                Log.d("isActivated", "start activity ProductKeyActivity ");
                 return;
             } else {
+                Log.d("isActivated", "Utils.setTrialCheckAlarm(this);");
                 Utils.setTrialCheckAlarm(this);
             }
         }
@@ -179,8 +184,8 @@ public class ScanService extends Service {
 //                if (isDashboardFeatureEnabled()) {
 //                    appLauncher.launchScanServ();
 //                }
-
-
+                DashboardActivity.Companion.stopHandler();
+                WelcomeActivity.stopHandler();
                 if (mailServConfig.AutoDeleteRecord && !mailServConfig.SendRecordsAtEndOfDay) {
                     DeleteLocalRecordAndPictures();
                 }

@@ -16,6 +16,8 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.loffler.scanServ.utils.AppLauncher;
+import com.loffler.scanServ.utils.AppLauncherImpl;
 import com.loffler.scanServ.utils.ViewUtilsKt;
 
 import org.json.JSONObject;
@@ -59,7 +61,7 @@ public class Utils {
             dirOrFile.delete();
     }
 
-    public static void notificationArrived(Context context, String title, String myMsg, long timeout) {
+    public static void notificationArrived(Context context, String title, String myMsg, long timeout, Handler handler) {
 
         final boolean overlayEnabled = Settings.canDrawOverlays(context);
         if (!overlayEnabled) return;
@@ -73,20 +75,22 @@ public class Utils {
         } else {
             alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         }
-        new Handler().postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             public void run() {
-                if(ViewUtilsKt.isAppInBackground(context)){
+                if (ViewUtilsKt.isAppInBackground(context)) {
                     alertDialog.show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            new AppLauncherImpl(context).launchScanServ();
                             alertDialog.dismiss();
                         }
-                    },5000L);
+                    }, 5000L);
                 }
             }
-        },(timeout *1000)-5000L);
+        }, (timeout * 1000) - 5000L);
     }
+
     public static String getEthMacAddress() {
         try {
             String interfaceName = "eth0";
@@ -133,7 +137,7 @@ public class Utils {
             // If the feature set value does not contain one of the enum values, or it is not
             // divisible by the base value, it is bad key
             if ((featureSet & FEATURE_SET.FEATURE_SET_MASK.getNumericType()) == 0 ||
-                 featureSet % FEATURE_SET.BASE.getNumericType() != 0) {
+                    featureSet % FEATURE_SET.BASE.getNumericType() != 0) {
                 Log.e(LOG_TAG, "Bad feature set key");
                 return false;
             }
@@ -155,7 +159,7 @@ public class Utils {
 
             // reverse the bytes in the string
             byte[] byteArray = address.getBytes();
-            for (int pos = 0; pos < (byteArray.length ) / 2; pos++){
+            for (int pos = 0; pos < (byteArray.length) / 2; pos++) {
                 byte temp = byteArray[pos];
                 int endPos = byteArray.length - pos - 1;
                 byteArray[pos] = byteArray[endPos];
@@ -188,8 +192,7 @@ public class Utils {
             this.type = i;
         }
 
-        public int getNumericType()
-        {
+        public int getNumericType() {
             return type;
         }
 
@@ -219,7 +222,7 @@ public class Utils {
     public static boolean createTrialFile(Context context) {
         File dir = new File(Constants.TRIAL_DIR);
 
-        if(!dir.exists()){
+        if (!dir.exists()) {
             dir.mkdirs();
         }
 
@@ -256,12 +259,10 @@ public class Utils {
         File inputFile = new File(Environment.getExternalStorageDirectory().toString() + "/sysinfo/config.dat");
         SharedPreferences prefs = context.getSharedPreferences(Constants.PreferenceName, Context.MODE_PRIVATE);
 
-        if(!inputFile.exists()){
+        if (!inputFile.exists()) {
             // Trial not started
             return false;
-        }
-        else
-        {
+        } else {
             long trialDate = 0;
             try {
                 BufferedReader br = new BufferedReader(new FileReader(inputFile));
@@ -366,7 +367,7 @@ public class Utils {
             String key;
             while (keys.hasNext()) {
                 key = keys.next();
-                switch(key.toLowerCase()) {
+                switch (key.toLowerCase()) {
                     case "company":
                         editor.putString(Constants.SupportCompanyKey, config.getString(key));
                         break;
@@ -381,7 +382,7 @@ public class Utils {
                         if (!sendlogsurl.endsWith("?")) sendlogsurl += "?";
                         editor.putString(Constants.SendLogsUrlKey, sendlogsurl);
                         break;
-                    case"updatesurl":
+                    case "updatesurl":
                         String updateurl = config.getString(key);
                         if (!updateurl.endsWith("?")) updateurl += "?";
                         editor.putString(Constants.UpdateUrlKey, updateurl);
