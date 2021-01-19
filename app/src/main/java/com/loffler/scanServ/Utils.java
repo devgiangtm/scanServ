@@ -1,5 +1,6 @@
 package com.loffler.scanServ;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -9,9 +10,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.loffler.scanServ.utils.ViewUtilsKt;
 
 import org.json.JSONObject;
 
@@ -32,6 +37,17 @@ import java.util.List;
 public class Utils {
     private static final String LOG_TAG = "Utils";
     // Doesn't delete the top folder, just everything underneath
+
+    public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static void deleteSubFiles(File dirOrFile, int level) {
         if (dirOrFile.isDirectory()) {
             for (File child : dirOrFile.listFiles()) {
@@ -43,6 +59,34 @@ public class Utils {
             dirOrFile.delete();
     }
 
+    public static void notificationArrived(Context context, String title, String myMsg, long timeout) {
+
+        final boolean overlayEnabled = Settings.canDrawOverlays(context);
+        if (!overlayEnabled) return;
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+        dialog.setTitle(title);
+        dialog.setMessage(myMsg);
+        dialog.setCancelable(true);
+        AlertDialog alertDialog = dialog.create();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+        } else {
+            alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                if(ViewUtilsKt.isAppInBackground(context)){
+                    alertDialog.show();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            alertDialog.dismiss();
+                        }
+                    },5000L);
+                }
+            }
+        },(timeout *1000)-5000L);
+    }
     public static String getEthMacAddress() {
         try {
             String interfaceName = "eth0";

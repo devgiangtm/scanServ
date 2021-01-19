@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -22,7 +26,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Trace;
+import android.provider.Settings;
+import android.util.Base64;
 import android.util.Size;
 import android.view.Surface;
 import android.view.View;
@@ -33,9 +40,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loffler.scanServ.Constants;
+import com.loffler.scanServ.ImageFilePath;
 import com.loffler.scanServ.NavigationActivity;
 import com.loffler.scanServ.R;
 import com.loffler.scanServ.ScanService;
+import com.loffler.scanServ.Utils;
 import com.loffler.scanServ.cdcgesture.CameraConnectionFragment;
 import com.loffler.scanServ.cdcgesture.ImageUtils;
 import com.loffler.scanServ.cdcgesture.Logger;
@@ -46,8 +55,11 @@ import com.loffler.scanServ.utils.ViewUtilsKt;
 
 import java.nio.ByteBuffer;
 
+import static com.loffler.scanServ.Constants.DashboardSettingsLogoImage;
 import static com.loffler.scanServ.Constants.DashboardSettingsLogoImagePathKey;
 import static com.loffler.scanServ.Constants.WELCOME_MESSAGE;
+import static com.loffler.scanServ.Utils.isMyServiceRunning;
+import static com.loffler.scanServ.Utils.notificationArrived;
 
 public abstract class WelcomeActivity extends AppCompatActivity
         implements ImageReader.OnImageAvailableListener,
@@ -70,7 +82,8 @@ public abstract class WelcomeActivity extends AppCompatActivity
     private Runnable postInferenceCallback;
     private Runnable imageConverter;
     private SharedPreferences prefs;
-
+    private ImageView ivLogo;
+    private TextView tvWelcome;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -83,14 +96,19 @@ public abstract class WelcomeActivity extends AppCompatActivity
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         setContentView(R.layout.welcome_layout);
-        ImageView ivLogo = findViewById(R.id.ivLogo);
-        TextView tvWelcome = findViewById(R.id.tvWelcome);
-        String uriLogo = SharedPreferencesController.with(getBaseContext()).getString(DashboardSettingsLogoImagePathKey);
+        ivLogo = findViewById(R.id.ivLogo);
+        tvWelcome = findViewById(R.id.tvWelcome);
+        String logo = getApplicationContext().getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE).getString(DashboardSettingsLogoImage, "");
+        ;
         String message = SharedPreferencesController.with(getBaseContext()).getString(WELCOME_MESSAGE);
-        if (!uriLogo.equals("")) {
-            ivLogo.setImageURI(Uri.parse(uriLogo));
+
+        if (!logo.equals("")) {
+            byte[] decodedString = Base64.decode(logo, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivLogo.setImageBitmap(decodedByte);
         }
-        if(!message.equals("")){
+
+        if (!message.equals("")) {
             tvWelcome.setText(message);
         }
         prefs = getApplicationContext().getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE);
@@ -99,19 +117,20 @@ public abstract class WelcomeActivity extends AppCompatActivity
         } else {
             requestPermission();
         }
+        if(!isMyServiceRunning(getApplicationContext(), ScanService.class)){
+            Intent servIntent = new Intent(getApplicationContext(), ScanService.class);
+            // reset the server if we are coming from the product key page
+            if (getIntent().hasExtra("resetserver")) {
+                servIntent.putExtra("reset", true);
+            } else {
+                servIntent.putExtra("reset", false);
+            }
 
-        Intent servIntent = new Intent(getApplicationContext(), ScanService.class);
-        // reset the server if we are coming from the product key page
-        if (getIntent().hasExtra("resetserver")) {
-            servIntent.putExtra("reset", true);
-        } else {
-            servIntent.putExtra("reset", false);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(servIntent);
-        } else {
-            startService(servIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(servIntent);
+            } else {
+                startService(servIntent);
+            }
         }
 
 
@@ -142,10 +161,9 @@ public abstract class WelcomeActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
         } else {
             new AppLauncherImpl(getApplicationContext()).launchEzPass();
+            notificationArrived(WelcomeActivity.this, getString(R.string.stay_too_long), getString(R.string.stay_mips_too_long_message), timeout);
         }
     }
-
-
 
     protected void playSound() {
         MediaPlayer mp = MediaPlayer.create(getBaseContext(), R.raw.beep1);
@@ -298,7 +316,16 @@ public abstract class WelcomeActivity extends AppCompatActivity
     public synchronized void onResume() {
         LOGGER.d("onResume " + this);
         super.onResume();
-
+        String logo = SharedPreferencesController.with(getBaseContext()).getString(DashboardSettingsLogoImage);
+        String message = SharedPreferencesController.with(getBaseContext()).getString(WELCOME_MESSAGE);
+        if (!logo.equals("")) {
+            byte[] decodedString = Base64.decode(logo, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivLogo.setImageBitmap(decodedByte);
+        }
+        if (!message.equals("")) {
+            tvWelcome.setText(message);
+        }
         handlerThread = new HandlerThread("inference");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());

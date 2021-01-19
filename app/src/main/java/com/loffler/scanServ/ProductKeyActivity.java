@@ -8,23 +8,29 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.loffler.scanServ.dashboard.DashboardActivity;
+import com.loffler.scanServ.service.FloatingWidgetService;
 import com.loffler.scanServ.welcomescreen.WelcomeDetectorActivity;
 
-public class ProductKeyActivity extends AppCompatActivity implements View.OnClickListener{
+public class ProductKeyActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView productKeyView;
     private SharedPreferences prefs;
@@ -45,6 +51,20 @@ public class ProductKeyActivity extends AppCompatActivity implements View.OnClic
             startService(configIntent);
         }
 
+        if (!Settings.canDrawOverlays(ProductKeyActivity.this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, 1234);
+        } else {
+            Intent intent = new Intent(ProductKeyActivity.this, FloatingWidgetService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
+
+        }
+
         if (configFileExists()) {
             // check if sharedPrefs has already got activationkey
             prefs = getApplicationContext().getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE);
@@ -63,7 +83,7 @@ public class ProductKeyActivity extends AppCompatActivity implements View.OnClic
 //                }
                 if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
                     startActivity(new Intent(getApplicationContext(), WelcomeDetectorActivity.class));
-                } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)){
+                } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
                     startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
                 } else {
                     startActivity(new Intent(getApplicationContext(), NavigationActivity.class));
@@ -119,6 +139,7 @@ public class ProductKeyActivity extends AppCompatActivity implements View.OnClic
             }
         }
     }
+
     @Override
     public void onClick(View v) {
         boolean validKey = Utils.validateKey(productKeyView.getText().toString(), prefs);
@@ -126,9 +147,7 @@ public class ProductKeyActivity extends AppCompatActivity implements View.OnClic
             // key is valid, continue to the main navigation page
             startActivity(new Intent(getApplicationContext(), NavigationActivity.class).putExtra("resetserver", true));
             finish();
-        }
-        else
-        {
+        } else {
             // key invalid prompt user with dialog
             new AlertDialog.Builder(this)
                     .setMessage("Invalid key, try again.")
@@ -141,7 +160,8 @@ public class ProductKeyActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     protected void onResume() {
-        if (prefs == null) prefs = getApplicationContext().getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE);
+        if (prefs == null)
+            prefs = getApplicationContext().getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE);
         boolean isActivated = prefs.getBoolean(Constants.ProductKeyActivationCompleted, false);
         boolean isOnTrial = Utils.checkTrialFileExists() && Utils.checkTrialValidity(this);
 
@@ -195,5 +215,14 @@ public class ProductKeyActivity extends AppCompatActivity implements View.OnClic
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1234) {
+            Intent intent = new Intent(ProductKeyActivity.this, FloatingWidgetService.class);
+            startService(intent);
+        }
     }
 }

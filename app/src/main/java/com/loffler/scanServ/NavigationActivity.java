@@ -13,8 +13,11 @@ import androidx.annotation.Nullable;
 import com.loffler.scanServ.cdcsetting.CDCSettingActivity;
 import com.loffler.scanServ.dashboard.DashboardActivity;
 import com.loffler.scanServ.dashboard.DashboardSettingsActivity;
+import com.loffler.scanServ.utils.AppLauncherImpl;
 import com.loffler.scanServ.welcomescreen.WelcomeDetectorActivity;
 import com.loffler.scanServ.welcomescreen.WelcomeSettingsActivity;
+
+import static com.loffler.scanServ.Utils.isMyServiceRunning;
 
 
 public class NavigationActivity extends BaseActivity implements Button.OnClickListener {
@@ -48,19 +51,16 @@ public class NavigationActivity extends BaseActivity implements Button.OnClickLi
         dashboardSettingsButton.setOnClickListener(this);
         cdcSettingsButton.setOnClickListener(this);
         welcomeSettingsButton.setOnClickListener(this);
+        if (!isMyServiceRunning(getApplicationContext(), ScanService.class)) {
+            Intent servIntent = new Intent(getApplicationContext(), ScanService.class);
+            // reset the server if we are coming from the product key page
+            servIntent.putExtra("reset", getIntent().hasExtra("resetserver"));
 
-        Intent servIntent = new Intent(getApplicationContext(), ScanService.class);
-        // reset the server if we are coming from the product key page
-        if (getIntent().hasExtra("resetserver")) {
-            servIntent.putExtra("reset", true);
-        } else {
-            servIntent.putExtra("reset", false);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(servIntent);
-        } else {
-            startService(servIntent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(servIntent);
+            } else {
+                startService(servIntent);
+            }
         }
     }
 
@@ -130,8 +130,10 @@ public class NavigationActivity extends BaseActivity implements Button.OnClickLi
 //        }
         if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
             startActivity(new Intent(getApplicationContext(), WelcomeDetectorActivity.class));
-        } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)){
+        } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
             startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+        } else {
+            new AppLauncherImpl(getApplicationContext()).launchMips();
         }
 
     }

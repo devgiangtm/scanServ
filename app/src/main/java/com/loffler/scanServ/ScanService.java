@@ -38,13 +38,11 @@ import com.loffler.scanServ.cdcgesture.MipsData;
 import com.loffler.scanServ.cdcsetting.CDCSettingModel;
 import com.loffler.scanServ.cdcsetting.Keys;
 import com.loffler.scanServ.cdcsetting.SharedPreferencesController;
-import com.loffler.scanServ.service.sql.dao.DaoResult;
 import com.loffler.scanServ.service.sql.dao.OutputDao;
 import com.loffler.scanServ.service.sql.dao.OutputDaoImpl;
 import com.loffler.scanServ.utils.AppLauncher;
 import com.loffler.scanServ.utils.AppLauncherImpl;
 import com.loffler.scanServ.utils.ViewUtilsKt;
-import com.loffler.scanServ.welcomescreen.WelcomeDetectorActivity;
 import com.opencsv.CSVWriter;
 
 import org.json.JSONException;
@@ -178,10 +176,9 @@ public class ScanService extends Service {
             public void onRequest(AsyncHttpServerRequest request, AsyncHttpServerResponse response) {
                 Log.i(LOG_TAG, "onRequest: Scan Server POST received. Temp/Face Scan passed off");
                 response.send("thank you");
-
-                if (isDashboardFeatureEnabled()) {
-                    appLauncher.launchScanServ();
-                }
+//                if (isDashboardFeatureEnabled()) {
+//                    appLauncher.launchScanServ();
+//                }
 
 
                 if (mailServConfig.AutoDeleteRecord && !mailServConfig.SendRecordsAtEndOfDay) {
@@ -199,7 +196,6 @@ public class ScanService extends Service {
                     boolean delayEnabled = prefs.getBoolean(Constants.ScanDelayEnabled, false);
                     int delay = prefs.getInt(Constants.ScanDelay, -1);
                     reqJson = new JSONObject(req.getBody().get().toString());
-
                     long checkTime = Long.parseLong(reqJson.getString("checkTime"));
                     if (delayEnabled && checkTime < lastScanTime + delay * 1000) {
                         Log.i(LOG_TAG, "Skipping scan, scan occurred before scan delay threshold");
@@ -288,7 +284,8 @@ public class ScanService extends Service {
                                     if (prefs.getBoolean(Constants.SQLConnected, false) && prefs.getBoolean(swSQLWriteLogs, false)) {
                                         submitOutput(reqJson);
                                     }
-                                    openLofflerApp();
+                                    appLauncher.launchScanServ();
+
                                 }
                             }
                             // Insert into the SQL table if we have successfully connected to one
@@ -322,11 +319,6 @@ public class ScanService extends Service {
         }
     }
 
-    public void openLofflerApp() {
-        PackageManager packageManager = getBaseContext().getPackageManager();
-        Intent intent = packageManager.getLaunchIntentForPackage("com.loffler.scanServ");
-        startActivity(intent);
-    }
 
 
     private boolean isDashboardFeatureEnabled() {

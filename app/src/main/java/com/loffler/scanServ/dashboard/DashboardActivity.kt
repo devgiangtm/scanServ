@@ -10,13 +10,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.loffler.scanServ.Constants
-import com.loffler.scanServ.NavigationActivity
-import com.loffler.scanServ.R
-import com.loffler.scanServ.ScanService
+import com.loffler.scanServ.*
 import com.loffler.scanServ.cdcsetting.SharedPreferencesController
 import com.loffler.scanServ.service.HardwareScannerImpl
 import com.loffler.scanServ.service.ScannedContentValidator
@@ -66,7 +62,7 @@ class DashboardActivity : AppCompatActivity() {
             object : CountDownTimer(timeout * 1000L, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     if (millisUntilFinished > 5000 && millisUntilFinished < 6000) {
-                        val basic = DialogSpec.Basic(R.string.stay_security_too_long, getString(R.string.stay_security_too_long_message))
+                        val basic = DialogSpec.Basic(R.string.stay_too_long, getString(R.string.stay_security_too_long_message))
                         basic.closeTimeOut = 5000L
                         MessageProvider.showAlert(this@DashboardActivity, basic)
                     }
@@ -93,13 +89,23 @@ class DashboardActivity : AppCompatActivity() {
         scanViewModel.scanId().observe(this, { dialogSpec ->
             SharedPreferencesController.with(applicationContext).saveInt(Constants.CURRENT_SCAN_ID, dialogSpec)
         })
+        scanViewModel.showTimeoutDialog().observe(this, { isShow ->
+            val timeout = SharedPreferencesController.with(applicationContext).getLong(Constants.DashboardSettingsReturnToForegroundTimeoutKey)
+            Utils.notificationArrived(this@DashboardActivity, getString(R.string.stay_too_long), getString(R.string.stay_mips_too_long_message), timeout)
+//            if(SharedPreferencesController.with(applicationContext).getBoolean(Constants.WELCOME_ENABLE)){
+//                finish()
+//            }
+
+        })
         scanViewModel.logo().observe(this, { logoUri ->
             if (logoUri == null) {
                 val imageString = getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE).getString(Constants.CompanyLogoKey, "");
                 val decodedImage: ByteArray = Base64.decode(imageString, Base64.DEFAULT)
                 logoImg.setImageBitmap(BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.size))
             } else {
-                logoImg.setImageURI(logoUri)
+                val imageString = getSharedPreferences(Constants.PreferenceName, MODE_PRIVATE).getString(Constants.DashboardSettingsLogoImage, "");
+                val decodedImage: ByteArray = Base64.decode(imageString, Base64.DEFAULT)
+                logoImg.setImageBitmap(BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.size))
             }
         })
         scanViewModel.qrCode().observe(this, { qrCodeBitmap ->

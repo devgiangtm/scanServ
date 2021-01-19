@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "137301750117",
+    "project_id": "scanserv-309c6",
+    "storage_bucket": "scanserv-309c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137301750117:android:fe0a0bfa19f925309a318c",
+        "android_client_info": {
+          "package_name": "com.loffler.scanServ"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137301750117-dt5tofi43pmrn32qpc2ngscrtnm3e6h7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.loffler.scanServ",
+            "certificate_hash": "49db66bf38b832af37ae4a5754bfd017eecd3489"
+          }
+        },
+        {
+          "client_id": "137301750117-vgbnf5nlpc67iiljefcs8r5c1b1psb0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUU_qIRhoSxwJsfzvjpG3jM3q9sv2uR8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "137301750117-vgbnf5nlpc67iiljefcs8r5c1b1psb0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

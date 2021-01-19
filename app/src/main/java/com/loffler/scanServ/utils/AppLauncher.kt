@@ -1,6 +1,5 @@
 package com.loffler.scanServ.utils
 
-import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -19,6 +18,8 @@ class AppLauncherImpl(val context: Context) : AppLauncher {
         private const val SCAN_SERV_DASHBOARD_ACTION = "com.loffler.scanServ"
     }
 
+
+
     override fun launchEzPass() {
         if (openApp(EZ_PASS_PACKAGE_NAME)) {
             val preferences = context.getSharedPreferences(Constants.PreferenceName, Context.MODE_PRIVATE)
@@ -29,7 +30,7 @@ class AppLauncherImpl(val context: Context) : AppLauncher {
                 if (context.isAppInBackground()) {
                     launchScanServ()
                 }
-            }, forceReturnDelay*1000L)
+            }, forceReturnDelay * 1000L)
         } else {
             MessageProvider.showToast(context, "Unable to open EZ Pass")
         }

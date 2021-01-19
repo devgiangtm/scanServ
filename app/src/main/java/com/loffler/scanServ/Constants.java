@@ -74,6 +74,7 @@ public final class Constants {
 
     public static final String DashboardSettingsEnableFeatureKey = "DashboardSettingsEnableFeatureKey";
     public static final String DashboardSettingsLogoImagePathKey = "DashboardSettingsLogoImagePathKey";
+    public static final String DashboardSettingsLogoImage = "DashboardSettingsLogoImage";
     public static final String DashboardSettingsInstructionsTextKey = "DashboardSettingsInstructionsTextKey";
     public static final String DashboardSettingsQrCodeContentKey = "DashboardSettingsQrCodeContentKey";
     public static final String DashboardSettingsValidationTableNameKey = "SqlValidationTableNameKey";

@@ -215,7 +215,9 @@ public abstract class CameraActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mCountDownTimer.cancel();
+        if(mCountDownTimer != null){
+            mCountDownTimer.cancel();
+        }
 //        if (prefs.getBoolean(Constants.WELCOME_ENABLE, false)) {
 //            startActivity(new Intent(getBaseContext(), WelcomeDetectorActivity.class));
 //        } else if (prefs.getBoolean(Constants.DashboardSettingsEnableFeatureKey, false)) {
